@@ -1,0 +1,215 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+public class MyBoggle extends JFrame implements ActionListener{
+
+	JFrame frame = new JFrame();
+	JPanel pan1;
+//	JPanel pane;
+	JPanel pan2;
+	
+	JLabel title;
+	
+	JTextField soloName;
+	JTextField multiName1;
+	JTextField multiName2;
+	
+	ImageIcon imageIcon;
+	JLabel label;
+	JLabel test;
+	JButton solo;
+	JButton multiplayer;
+	JButton btn1;
+	JButton btn2;
+	
+	JLabel logo;
+	
+	JPanel temp;
+	JPanel temp2;
+	
+	BufferedImage myPicture;
+	JLabel picLabel;
+	
+	//static GraphicsDevice device = GraphicsEnvironment
+	 //       .getLocalGraphicsEnvironment().getScreenDevices()[0];
+	
+	GridBagConstraints c = new GridBagConstraints();
+
+	public MyBoggle() throws IOException {
+		setTitle("MyBoggle!");
+		setLocation(100, 100);
+	//	setSize(1000, 600);
+	//	setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	//	setUndecorated(true);
+	//	setLocationRelativeTo(null);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+		
+		setLayout(new FlowLayout());
+		JLabel pane = new JLabel(new ImageIcon("bg2.jpg"));
+
+	//	JLabel pane = new JLabel(new ImageIcon("D:\\Programming\\workspace\\ICS4U\\Boggle\\dio.jpg"));
+		pane.setLayout(new GridBagLayout());
+		
+		temp2 = new JPanel(); // top panel behind boggle logo
+		temp2.setBackground(new Color(80,0,50,50));
+		temp2.setPreferredSize(new Dimension(640,142));
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridheight = 1;
+		c.gridwidth = 8;
+		c.insets = new Insets(0, 10, 10, 10);
+		pane.add(temp2, c);
+		
+		logo = new JLabel(new ImageIcon("boggle_logo.png"));
+		temp2.add(logo);
+		
+		
+		temp = new JPanel();
+		temp.setBackground(new Color(100, 50, 0, 100));
+		temp.setPreferredSize(new Dimension(50,100));
+		c.gridx = 2;
+		c.gridy = 1;
+		c.gridheight = 2;
+		c.gridwidth = 1;
+		c.insets = new Insets(10, 10, 10, 10);
+		pane.add(temp, c);
+		
+		solo = new JButton("SOLO");
+		solo.addActionListener(this);
+		solo.setFont(new Font("Helvetica", Font.BOLD, 20));
+		solo.setPreferredSize(new Dimension(250, 50));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		c.gridheight = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 10, 20);
+		pane.add(solo, c);
+		
+		soloName = new JTextField("Enter your name");
+		soloName.setFont(new Font("Helvetica", Font.BOLD, 15));
+		soloName.setPreferredSize(new Dimension(250, 40));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 2;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 10, 20);
+		pane.add(soloName, c);
+		
+		multiplayer = new JButton("MULTIPLAYER");
+		multiplayer.addActionListener(this);
+		multiplayer.setFont(new Font("Helvetica", Font.BOLD, 20));
+		multiplayer.setPreferredSize(new Dimension(250, 50));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 3;
+		c.gridy = 2;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.gridwidth = 2;
+		c.insets = new Insets(10, 20, 10, 120);
+		pane.add(multiplayer, c);	
+		
+		multiName1 = new JTextField("Enter your name");
+		multiName1.setFont(new Font("Helvetica", Font.BOLD, 15));
+		multiName1.setPreferredSize(new Dimension(120, 40));
+	//	c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 3;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 20, 10, 5);
+		pane.add(multiName1, c);
+		
+		multiName2 = new JTextField("Enter your name");
+		multiName2.setFont(new Font("Helvetica", Font.BOLD, 15));
+		multiName2.setPreferredSize(new Dimension(120, 40));
+	//	c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 4;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 5, 10, 120);
+		pane.add(multiName2, c);
+		
+		
+		
+		add(pane);
+		pack();
+		setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+		
+		if(command.equals("SOLO")) {
+			System.out.println("gay");
+			JOptionPane.showMessageDialog(this,
+			        "The game of Boggle is a word puzzle game. There is a 5x5 grid of random letters (or dice), \n"
+			        + "and you need to find possible words that can be made from the 25 letters. You can only \n"
+			        + "choose letters that are connected in all 8 directions. Have Fun!",
+			        "Instructions",
+			        JOptionPane.INFORMATION_MESSAGE);
+		//	setSize(1000, 600);
+		//	setUndecorated(true);
+		//	setVisible(true);
+		}/* else if (command.equals("MULIPLAYER")){
+			JOptionPane.showMessageDialog(this,
+			        "The game of Boggle is a word puzzle game where there is a 5x5 grid of random letters.",
+			        "Instructions",
+			        JOptionPane.INFORMATION_MESSAGE);
+		//	JOptionPane.showMessageDialog(this, "You Pressed Button FOUR",  
+         //           "INFORMATION",  
+          //          JOptionPane.INFORMATION_MESSAGE);
+		}*/
+	}
+	
+	public static void main(String[] args) throws IOException {
+		
+		MyBoggle frame = new MyBoggle();
+		/*
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI();
+            }
+        });
+*/
+	}
+
+}
