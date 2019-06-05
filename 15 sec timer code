@@ -1,0 +1,14 @@
+long time = System.currentTimeMillis();
+		long elasped = System.currentTimeMillis() - time;
+		long second = 0;
+		long counter = 15;
+		
+		while (second > - 1) {
+			elasped = System.currentTimeMillis() - time;;
+			second = 15 - elasped / 1000;
+			
+			if (counter - 1 == second) {
+				System.out.println(counter);
+			}
+			counter = second;
+		}
