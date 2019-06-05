@@ -1,0 +1,39 @@
+import java.util.Random;
+
+public class BoggleDice {
+  
+  public int orientation;
+  public int position;
+  public String[] letters = new String[6];
+  
+  
+  public String getOrientation () {
+    return letters[orientation];
+  }
+  
+  public void setOrientation (int newOrientation) {
+    orientation = newOrientation;
+  }
+  
+  public int getPosition () {
+    return position;
+  }
+  
+  public void setPosition (int newPosition) {
+    position = newPosition;
+  }
+  
+  public void rollDie () {
+    Random rand = new Random();
+    this.setOrientation(rand.nextInt(6));
+  }
+  
+  public BoggleDice (String[] list) {
+    for (int i = 0; i < list.length; i++) {
+      letters[i] = list[i];
+    }
+    position = 0;
+    orientation = 0;
+  }
+ 
+}
