@@ -1,0 +1,10 @@
+public void scoreAndWordlist (String word, int player) {
+  if (player == 1) {
+    score += word.length();
+    /*whatever the arraylist is*/ .add(word);
+  }
+  else if (player == 2) {
+    p2Score += word.length();
+    /*whatever the arraylist is*/ .add(word);
+  }
+}
