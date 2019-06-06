@@ -1,0 +1,32 @@
+/**
+     * Operations done after the game has ended either because reset was clicked
+     * or the time limit ran out
+     * 
+     * @param wordsFound --> the words found in the user in the text box
+     * @param wordsComputerFound --> words found recursively by the AI (found in this method)
+     * @param labelThingBottomCongratulationGay --> he label at the bottom that prints congratulations once the game has ended
+     */
+
+//used for solo, when the game ends
+public class endGame {
+    
+    private String wordsFound [] = new String [100];
+    private String wordsComputerFound [] = new String [100];
+    private String labelThingBottomCongratulationGay = "";
+    private int points;
+            
+    public static void main (String args[]){
+        
+    }
+    
+    public void endGame(){
+        String empty [] = new String [wordsFound.length];
+        wordsFound = empty;
+        wordsComputerFound = empty;
+        labelThingBottomCongratulationGay = "Thank you for playing Boggle!!!!";
+        if (points >25) labelThingBottomCongratulationGay += " You are amazing at Boggle!";
+        else if (points > 10 && points <= 25) labelThingBottomCongratulationGay += " You are decent at Boggle.";
+        else labelThingBottomCongratulationGay += " Your pretty bad at this game";
+    }
+    
+}
