@@ -1,0 +1,612 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.TextField;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
+
+public class MyBoggle2nd extends JFrame implements ActionListener{
+
+	JFrame frame = new JFrame();
+	JPanel pan1;
+	JLabel pane;
+	JPanel pan2;
+	
+	JLabel title;
+	
+	JTextField soloName;
+	JTextField multiName1;
+	JTextField multiName2;
+	
+	ImageIcon imageIcon;
+	JLabel label;
+	JLabel test;
+	JButton solo;
+	JButton multiplayer;
+	JButton instructions;
+	JButton btn1;
+	JButton btn2;
+	
+	JLabel logo;
+	
+	JPanel temp;
+	JPanel temp2;
+	
+	BufferedImage myPicture;
+	JLabel picLabel;
+	
+	
+	// multiplayer screen
+	
+	JLabel panM;
+	JPanel top;
+	JPanel left;
+	JPanel Midmid;
+	JPanel topMid;
+	JPanel mid;
+	JPanel botMid;
+	JPanel right;
+	JPanel spacer1;
+	JPanel spacer2;
+	
+	// top panel
+	JButton settings;
+	JButton pause;
+	JButton restart;
+	JButton mainMenu;
+	JLabel mode;
+	
+	// left panel
+	JLabel name;
+	JLabel wordlistTitle;
+	JScrollPane wordlist; // change to scrollPane later
+	JLabel score;
+	JTextArea textArea1;
+	
+	// mid panel (probably box layout and grid layout
+	JLabel timer;
+	JButton start;
+	JButton Enter;
+	
+	// grid of JLabels for the boggle grid of letter
+	/*
+	public static BoggleDice d1; public static BoggleDice d2; public static BoggleDice d3; public static BoggleDice d4; public static BoggleDice d5;
+	public static BoggleDice d6; public static BoggleDice d7; public static BoggleDice d8; public static BoggleDice d9; public static BoggleDice d10;
+	public static BoggleDice d11; public static BoggleDice d12; public static BoggleDice d13; public static BoggleDice d14; public static BoggleDice d15;
+	public static BoggleDice d16; public static BoggleDice d17; public static BoggleDice d18; public static BoggleDice d19; public static BoggleDice d20;
+	public static BoggleDice d21; public static BoggleDice d22; public static BoggleDice d23; public static BoggleDice d24; public static BoggleDice d25;*/
+	JLabel[] dice = new JLabel[25];
+	
+	// bunch of JLabels
+	JLabel playerTurn;
+	
+	// bottom mid panel
+	JTextField enterWord;
+	
+	
+	// rightpanel
+	JLabel name2;
+	JLabel wordlistTitle2;
+	JScrollPane wordlist2; // change to scrollPane later
+	JLabel score2;
+	
+	
+	
+	//static GraphicsDevice device = GraphicsEnvironment
+	 //       .getLocalGraphicsEnvironment().getScreenDevices()[0];
+	
+	GridBagConstraints c = new GridBagConstraints();
+
+	public MyBoggle2nd() throws IOException {
+		setTitle("MyBoggle!");
+		setLocation(100, 100);
+	//	setSize(1000, 600);
+	//	setExtendedState(JFrame.MAXIMIZED_BOTH); 
+	//	setUndecorated(true);
+	//	setLocationRelativeTo(null);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+		
+		setLayout(new FlowLayout());
+		
+		// multi screen
+		panM = new JLabel(new ImageIcon("yellowBg.jpg"));
+		panM.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		add(panM);
+		
+		top = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		top.setPreferredSize(new Dimension(1360, 70));
+		top.setBackground(new Color(224, 74, 27, 255));
+	//	top.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.red)); // Creates a border 3 pixels thick
+	//	top.setBorder(BorderFactory.createLoweredBevelBorder());
+		panM.add(top);
+		
+		mainMenu = new JButton("Main Menu");
+		mainMenu.addActionListener(this);
+		mainMenu.setPreferredSize(new Dimension(150, 50));
+		top.add(mainMenu);
+		
+		settings = new JButton("Settings");
+		settings.setPreferredSize(new Dimension(150, 50));
+		top.add(settings);
+		
+		pause = new JButton("Pause");
+		pause.setPreferredSize(new Dimension(150, 50));
+		top.add(pause);
+		
+		restart = new JButton("Restart");
+		restart.setPreferredSize(new Dimension(150, 50));
+		top.add(restart);
+		
+		
+		
+		
+		
+	//	spacer1 = new JPanel();
+	//	spacer1.setPreferredSize(new Dimension(100, 600));
+	//	panM.add(spacer1);
+		
+		// left panel
+		
+		left = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 10));
+		left.setPreferredSize(new Dimension(260, 700));
+		left.setBackground(new Color(0, 0, 0, 50));
+		panM.add(left);
+		
+		name = new JLabel("Bob");
+		name.setPreferredSize(new Dimension(200, 30));
+		name.setForeground(Color.WHITE);
+		name.setFont(new Font("Helvetica", Font.BOLD, 30));
+		left.add(name);
+		
+		wordlistTitle = new JLabel("WORDLIST:");
+		wordlistTitle.setPreferredSize(new Dimension(200, 40));
+		wordlistTitle.setForeground(Color.WHITE);
+		wordlistTitle.setFont(new Font("Helvetica", Font.BOLD, 30));
+		left.add(wordlistTitle);
+		
+		wordlist = new JScrollPane();
+		wordlist.setPreferredSize(new Dimension(240, 400));
+		left.add(wordlist);
+		
+		score = new JLabel("Score");
+		score.setPreferredSize(new Dimension(200, 60));
+		score.setForeground(Color.WHITE);
+		score.setFont(new Font("Helvetica", Font.BOLD, 30));
+		left.add(score);
+		
+		
+		
+		// whole mid panel
+		
+		Midmid = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		Midmid.setPreferredSize(new Dimension(600, 700));
+		Midmid.setBackground(new Color(0,0,0,50));
+		panM.add(Midmid);
+		
+		
+		// topMid panel
+		topMid = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		topMid.setBackground(new Color(255, 255, 255, 100));
+		Midmid.add(topMid);
+		start = new JButton("START");
+		start.addActionListener(this);
+		start.setFont(new Font("Helvetica", Font.BOLD, 20));
+		topMid.add(start);
+		
+		Enter = new JButton("Enter");
+		Enter.addActionListener(this);
+		Enter.setFont(new Font("Helvetica", Font.BOLD, 20));
+		topMid.add(Enter);
+		
+		
+		
+		// mid panle with the grid of dice
+		mid = new JPanel(new GridLayout(5,5));
+		mid.setPreferredSize(new Dimension(500, 500));
+		mid.setBackground(new Color(255, 255, 255, 255));
+	//	mid.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.red)); // Creates a border 3 pixels thick
+		Midmid.add(mid);
+		
+		for(int i = 0; i < 25; i++) {
+			dice[i] = new JLabel("");
+			dice[i].setHorizontalAlignment(SwingConstants.CENTER);
+			dice[i].setBackground(new Color(0, 0, 0, 50));
+			dice[i].setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.red)); // Creates a border 3 pixels thick
+		//	tempLetter.setAlignmentY(Component.CENTER_ALIGNMENT);
+			dice[i].setForeground(Color.BLACK);
+			dice[i].setFont(new Font("Helvetica", Font.BOLD, 30));
+			mid.add(dice[i]);
+		}
+	//	dice[10].setText("gay");
+		
+		
+		
+		// bottom mid panel
+		botMid = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		
+		enterWord = new JTextField();
+		enterWord.addActionListener(this);
+		enterWord.setPreferredSize(new Dimension(400, 50));
+		botMid.add(enterWord);
+		Midmid.add(botMid);
+		
+		
+		
+		
+		right = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 10));
+		right.setPreferredSize(new Dimension(260, 700));
+		right.setBackground(new Color(0, 0, 0, 50));
+		panM.add(right);
+		
+		name2 = new JLabel("Joe");
+		name2.setPreferredSize(new Dimension(200, 30));
+		name2.setForeground(Color.WHITE);
+		name2.setFont(new Font("Helvetica", Font.BOLD, 30));
+		right.add(name2);
+		
+		wordlistTitle2 = new JLabel("WORDLIST:");
+		wordlistTitle2.setPreferredSize(new Dimension(200, 40));
+		wordlistTitle2.setForeground(Color.WHITE);
+		wordlistTitle2.setFont(new Font("Sans Serif", Font.BOLD, 30));
+		right.add(wordlistTitle2);
+		
+		
+		textArea1 = new JTextArea("test");
+		textArea1.setEditable(false);
+		
+		wordlist2 = new JScrollPane(textArea1);
+		wordlist2.setPreferredSize(new Dimension(240, 400));
+	//	wordlist2.setFocusable(false);
+	//	wordlist2.setViewportView(new JLabel("test test test test\n asdfasdf /n asdfasdsadffffffffff"));
+		right.add(wordlist2);
+		
+		score2 = new JLabel("Score");
+		score2.setPreferredSize(new Dimension(200, 60));
+		score2.setForeground(Color.WHITE);
+		score2.setFont(new Font("Helvetica", Font.BOLD, 30));
+		right.add(score2);
+		
+		
+	//	String time = counter;
+	//	timer = new JLabel("TIMER:" + counter);
+	//	panM.add(timer);
+		panM.setVisible(false);
+		
+		// intro screen
+		pane = new JLabel(new ImageIcon("bg2.jpg"));
+
+	//	JLabel pane = new JLabel(new ImageIcon("D:\\Programming\\workspace\\ICS4U\\Boggle\\dio.jpg"));
+		pane.setLayout(new GridBagLayout());
+		
+		temp2 = new JPanel(); // top panel behind boggle logo
+		temp2.setBackground(new Color(80,0,50,50));
+		temp2.setPreferredSize(new Dimension(650,142));
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridheight = 1;
+		c.gridwidth = 8;
+		c.insets = new Insets(0, 10, 10, 10);
+		pane.add(temp2, c);
+		
+		logo = new JLabel(new ImageIcon("boggle_logo.png"));
+		temp2.add(logo);
+		
+		
+		instructions = new JButton("Instructions");
+		instructions.addActionListener(this);
+		instructions.setFont(new Font("Helvetica", Font.BOLD, 20));
+	//	instructions.setPreferredSize(new Dimension(200, 40));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridwidth = 4;
+		c.gridheight = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 20, 120);
+		pane.add(instructions, c);
+		
+		temp = new JPanel();
+		temp.setBackground(new Color(100, 50, 0, 0));
+		temp.setPreferredSize(new Dimension(50,100));
+		c.gridx = 2;
+		c.gridy = 2;
+		c.gridheight = 2;
+		c.gridwidth = 1;
+		c.insets = new Insets(10, 10, 10, 10);
+		pane.add(temp, c);
+		
+		solo = new JButton("SOLO");
+		solo.addActionListener(this);
+		solo.setFont(new Font("Helvetica", Font.BOLD, 20));
+		solo.setPreferredSize(new Dimension(250, 50));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		c.gridheight = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 10, 20);
+		pane.add(solo, c);
+		
+		soloName = new JTextField("Enter your name");
+		soloName.setFont(new Font("Helvetica", Font.BOLD, 15));
+		soloName.setPreferredSize(new Dimension(250, 40));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 10, 20);
+		pane.add(soloName, c);
+		
+		multiplayer = new JButton("MULTIPLAYER");
+		multiplayer.addActionListener(this);
+		multiplayer.setFont(new Font("Helvetica", Font.BOLD, 20));
+		multiplayer.setPreferredSize(new Dimension(250, 50));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 3;
+		c.gridy = 3;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.gridwidth = 4;
+		c.insets = new Insets(10, 20, 10, 120);
+		pane.add(multiplayer, c);	
+		
+		multiName1 = new JTextField("Enter your name");
+		multiName1.setFont(new Font("Helvetica", Font.BOLD, 15));
+		multiName1.setPreferredSize(new Dimension(120, 40));
+	//	c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 3;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 20, 10, 5);
+		pane.add(multiName1, c);
+		
+		multiName2 = new JTextField("Enter your name");
+		multiName2.setFont(new Font("Helvetica", Font.BOLD, 15));
+		multiName2.setPreferredSize(new Dimension(120, 40));
+	//	c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 4;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 5, 10, 120);
+		pane.add(multiName2, c);
+		
+		
+		
+		add(pane);
+		pack();
+		setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+		
+		if(command.equals("Instructions")) {
+		//	System.out.println("gay");
+			JOptionPane.showMessageDialog(this,
+			        "The game of Boggle is a word puzzle game. There is a 5x5 grid of random letters (or dice), \n"
+			        + "and you need to find possible words that can be made from the 25 letters. You can only \n"
+			        + "choose letters that are connected in all 8 directions. Have Fun!",
+			        "Instructions",
+			        JOptionPane.INFORMATION_MESSAGE);
+		//	setSize(1000, 600);
+		//	setUndecorated(true);
+		//	setVisible(true);
+		} else if (command.equals("MULTIPLAYER")) {
+			pane.setVisible(false);
+			panM.setVisible(true);
+		//	timer.setText("test");
+			/*
+			for(int i = 15; i >= 0; i++) {
+				timer.setText("TIMER: " + i);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}*/
+			
+			/*
+			long time = System.currentTimeMillis();
+			long elasped = System.currentTimeMillis() - time;
+			long second = 0;
+			counter = 15;
+			
+			while (second > - 1) {
+				elasped = System.currentTimeMillis() - time;;
+				second = 15 - elasped / 1000;
+				
+				if (counter - 1 == second) {
+					int num = (int) counter;
+					timer.setText("TIMER: " + counter);
+					
+				}
+				counter = second;
+			}*/
+		//	pnlTime.start();
+		//	timer.setText("TIMER: " + Timer15());
+			
+		} else if (command.equals("Main Menu")) {
+			pane.setVisible(true);
+			panM.setVisible(false);
+		} else if (command.equals("START")) {
+			generateBoard();
+		//	System.out.println(diceArray[5].getOrientation());
+			for(int i = 0; i < 25; i++) {
+				String temp = String.valueOf(diceArray[i].getOrientation());
+				System.out.println(temp + " plase");
+				dice[i].setText(temp);
+				
+			}
+			
+			
+			
+		} else if (command.equals("Enter")) {
+			textArea1.append(enterWord.getText() + "\n");
+			System.out.println(enterWord.getText());
+			
+		}
+	//	String commandText = enterWord.getTex
+	}
+	
+	public static int Timer15() {
+		long time = System.currentTimeMillis();
+		long elasped = System.currentTimeMillis() - time;
+		long second = 0;
+		counter = 15;
+		
+		while (second > - 1) {
+			elasped = System.currentTimeMillis() - time;;
+			second = 15 - elasped / 1000;
+			
+			if (counter - 1 == second) {
+				int num = (int) counter;
+				return num;
+				
+			}
+			counter = second;
+		}
+		return 69;
+	}
+
+	public void generateBoard() {
+		Random rand = new Random();
+
+		BoggleDice[] scrambledDice = new BoggleDice[25];
+		ArrayList<Integer> testArray = new ArrayList<Integer>();
+		
+		
+		
+		int test;
+
+		for (int i = 0; i < 25; i++) {
+			test = rand.nextInt(25);
+			if (!testArray.contains(test)) {
+				testArray.add(test);
+				System.out.println(test);
+				scrambledDice[i] = diceArray[test];
+			} else {
+				i--;
+			}
+		}
+		
+	//	d1.setOrientation(3);
+		diceArray = scrambledDice;
+	//	System.out.println("orien: " + diceArray[5].getOrientation());	
+		
+	//	d1.setOrientation(3);
+	//	d1.rollDie();
+	//	diceArray[5]
+	//	System.out.println("test " + d1.getOrientation());
+	//	System.out.println(diceArray[0].getOrientation());
+		
+		for (int i = 0; i < 25; i++) {
+			diceArray[i].rollDie();
+		}
+	}
+
+	public static String[] words = new String[127000];
+	public static int[] startLetterIndexes = new int[26];
+	public static long counter;
+//	private static int[] scrambledDice;
+	public static BoggleDice[] diceArray = new BoggleDice[25];//  = {d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25};
+
+	
+	public static String[] diceLetters = {"AAAGRS","AAEEEE", "AAFIRS","ADENNN","AEEEEM",
+			"AEEGMU","AEGMNN","AGIRSY","BJKQXZ","CCNSTW",
+			"CEIILT","CEIMPT","CEIPST","DDLNOR","DHHLOR",
+			"DHHNOT","DHLNOR","EIIITT", "EMOTTT","ENSSSU",
+			"FIPRSY","GORRVW","HIPRRY","NOOTUW","OOOTTU"};
+	
+	
+	
+	
+	public static void main(String[] args) throws IOException {
+		
+		for(int i = 0; i  <25; i++) {
+			diceArray[i] = new BoggleDice(diceLetters[i], 0);
+		}
+		MyBoggle2nd frame = new MyBoggle2nd();
+		/*
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI();
+            }
+        });
+        
+*/
+				
+		File List = new File("wordlist.txt");
+		Scanner fileScanner = new Scanner(List);
+		int c = 0;
+		int letterCounter = 0;
+		String startLetter = "b";
+		while (fileScanner.hasNext()) {
+			words[c] = fileScanner.next();
+			if(!startLetter.equals(words[c].substring(0,1))) {
+			//	System.out.println(startLetter + " " + c);
+				startLetterIndexes[letterCounter] = c;
+				letterCounter++;
+			}
+			startLetter = words[c].substring(0,1);
+			c++;
+		}
+		fileScanner.close();
+		
+		
+			/*for(int i = 0; i < 26; i++) {
+			System.out.println(startLetterIndexes[i]);
+		}*/
+		
+		
+		
+		
+		
+	}
+
+}
