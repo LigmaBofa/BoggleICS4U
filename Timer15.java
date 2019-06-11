@@ -15,23 +15,36 @@ public class Timer15 extends JPanel implements Runnable {
 	Thread thread;
 	static long initTime = System.currentTimeMillis();
 	boolean stop;
-	public static long second = -1;
+	public long second = 15;
+	public long originalSeconds = 15;
 
-	void start() {
+	void start(boolean gameMode) {
 		initTime = System.currentTimeMillis();
 		stop = false;
 		thread = new Thread(this);
 		thread.start();
-		second = 15;
-
+		if (gameMode) {
+			originalSeconds = 180;
+		}
+		else {
+			originalSeconds = 15;
+		}
+		second = originalSeconds;
 	}
 	
 	public void setSeconds(int newSeconds) {
+		this.originalSeconds = newSeconds;
 		this.second = newSeconds;
+
 	}
 
+	
 	public long getTime() {
 		return this.second;
+	}
+	
+	public long getOriginalSeconds() {
+		return this.originalSeconds;
 	}
 	
 //	void pause() {
@@ -50,27 +63,23 @@ public class Timer15 extends JPanel implements Runnable {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-	//	long elasped = System.currentTimeMillis() - initTime;
-		
-	//	counter = 15;
-		
+
 		if (second > -1 && !stop) {
 			long elasped = System.currentTimeMillis() - initTime;
-			second = 15 - (elasped / 1000);
+			System.out.println(originalSeconds + " || " + second);
+			g.setColor(Color.RED);
+			g.setFont(new Font("Verdana", Font.PLAIN, 30));
+			
+			second = getOriginalSeconds() - (elasped / 1000);
 			System.out.println(elasped + "  init: " + initTime + " s: " +  second);
 			int timeInt = (int) second;
 			String time = " " + timeInt;
-			g.setColor(Color.RED);
-			g.setFont(new Font("Serif", Font.PLAIN, 30));
-			g.drawString("Timer:" + time, 5, 35);
-		} else {
-			g.setColor(Color.RED);
-			g.setFont(new Font("Serif", Font.PLAIN, 30));
-			if(second == -1) {
-				g.drawString("Timer: 15", 5, 35);
-			} else g.drawString("Timer: " + second, 5, 35);
 			
+			if(getOriginalSeconds() - (elasped)/1000 < -2) {
+				g.drawString("Timer: " + getOriginalSeconds(), 5, 35);
+			} else {
+				g.drawString("Timer:" + time, 5, 35);
+			}
 		}
 	}
 	
