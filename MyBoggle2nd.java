@@ -435,7 +435,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   c.insets = new Insets(10, 20, 10, 5);
   pane.add(multiName1, c);
 
-  //intiialize text field asking the user to enter their name, for multiplayer
+   //intiialize text field asking the user to enter their name, for multiplayer
   multiName2 = new JTextField("Enter your name");
   multiName2.setFont(new Font("Helvetica", Font.BOLD, 15));
   multiName2.setPreferredSize(new Dimension(120, 40));
@@ -447,38 +447,38 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   c.insets = new Insets(10, 5, 10, 120);
   pane.add(multiName2, c);
 
-  //adds pane to the screen to set up the home screen
+   //adds pane to the screen to set up the home screen
   add(pane);
   setVisible(true);
  }
 
- //setup for instructions pop-up description
+   //setup for instructions pop-up description
  public void delay() throws InterruptedException {
   Thread.sleep(500);
  }
-//sets up action listener for this button that brings up instructions
+   //sets up action listener for this button that brings up instructions
  public void actionPerformed(ActionEvent e) {
   String command = e.getActionCommand();
-//description
+   //description
   if (command.equals("Instructions")) {
    JOptionPane.showMessageDialog(this,
      "The game of Boggle is a word puzzle game. There is a 5x5 grid of random letters (or dice), \n"
        + "and you need to find possible words that can be made from the 25 letters. You can only \n"
        + "choose letters that are connected in all 8 directions. Have Fun!",
      "Instructions", JOptionPane.INFORMATION_MESSAGE);
-//changes frame if multiplayer is chosen
+   //changes frame if multiplayer is chosen
   } else if (command.equals("MULTIPLAYER")) {
    soloGame = false;
    panM.add(right);
    pane.setVisible(false);
    panM.setVisible(true);
-//changes frame if multiplayer is chosen
+   //changes frame if multiplayer is chosen
   } else if (command.equals("SOLO")) {
    soloGame = true;
    pane.setVisible(false);
    panM.remove(right);
    panM.setVisible(true);
-//changes frame if the main menu button is clicked
+   //changes frame if the main menu button is clicked
   } else if (command.equals("Main Menu")) {
    pane.setVisible(true);
    panM.setVisible(false);
@@ -492,7 +492,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
     dice[i].setText(temp);
    }
    tt.start(soloGame);
-//
+  // once the enter button is pressed, methods are called to determine validity
   } else if (command.equals("Enter")) {
    tt.stop();
    System.out.println("time: " + tt.getTime());
@@ -513,13 +513,13 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
 
     Derrick = new validateWord(guessWord, board, startLetterIndexes, words, 3);
 
-    Color[] colors = new Color[guessWord.length()]; // store original colours before highlighting the
-                // letters
+    Color[] colors = new Color[guessWord.length()]; // store original colours before highlighting the letters
     for (int i = 0; i < guessWord.length(); i++) {
      colors[i] = UIManager.getColor(dice[i]);
      System.out.println(colors[i]);
     }
 
+    // validate board and recolour the selected letters
     int[] posLetters;
     if (Derrick.validateDicLen()) {
      posLetters = Derrick.validateBoard();
@@ -527,6 +527,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
      Border raisedbevel = BorderFactory.createRaisedBevelBorder();
      Border loweredbevel = BorderFactory.createLoweredBevelBorder();
 
+     // recolour the letters
      for (int i = 0; i < guessWord.length(); i++) {
       for (int j = 0; j < guessWord.length(); j++) {
        dice[posLetters[i]].setBackground(new Color(42, 15, 76));
@@ -534,8 +535,11 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
       }
 
      }
+     
+     // initializing the timer
      new Timer(1000, new ActionListener() {
       @Override
+      // setting the backgrounds
       public void actionPerformed(ActionEvent e) {
        for (int i = 0; i < guessWord.length(); i++) {
         dice[posLetters[i]].setBackground(new Color(redValues[posLetters[i]],
@@ -545,6 +549,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
       }
      }).start();
 
+     // display if the word is invalid
     } else {
      valid = false;
      JOptionPane.showMessageDialog(this, "The word is invalid.", "Word", JOptionPane.WARNING_MESSAGE);
@@ -577,14 +582,13 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
      p1Score += guessWord.length();
      score.setText("Score: " + p1Score);
     }
-   // tt.setSeconds(-1);
     setSize(1355, 821);
 
-    // setLocation(10, 100);
     revalidate();
     tt.start(soloGame);
     setSize(1355, 820);
    }
+   // if the pause button is pressed
   } else if (command.equals("Pause")) {
    tt.stop();
    panMPause.setVisible(true);
@@ -594,6 +598,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   }
  }
 
+ // method to generate the board
  public void generateBoard() {
   Random rand = new Random();
 
@@ -602,6 +607,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
 
   int test;
 
+  // randomly generate 25 positions for the dice with no duplicates
   for (int i = 0; i < 25; i++) {
    test = rand.nextInt(25);
    if (!testArray.contains(test)) {
@@ -614,11 +620,13 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   }
   diceArray = scrambledDice;
 
+  // roll all the dice to have a random letter on top
   for (int i = 0; i < 25; i++) {
    diceArray[i].rollDie();
   }
  }
 
+ // declare and initialize the scores of the players
  private int p1Score = 0;
  private int p2Score = 0;
 
@@ -652,6 +660,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
  private String labelThingBottomCongratulationGay = "";
  private int points;
 
+ // method to display messages when ending the game
  public void endGame() {
   String empty[] = new String[wordsFound.length];
   wordsFound = empty;
@@ -665,6 +674,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
    labelThingBottomCongratulationGay += " You're pretty bad at this game";
  }
 
+ // initialize array to hold the dictionary
  public static String[] words = new String[127000];
  public static int[] startLetterIndexes = new int[26];
  public static long counter;
@@ -673,17 +683,22 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
                 // d13, d14, d15, d16, d17, d18, d19, d20, d21, d22,
                 // d23, d24, d25};
 
+ // initializing the letters on the dice
  public static String[] diceLetters = { "AAAGRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM", "AEEGMU", "AEGMNN",
    "AGIRSY", "BJKQXZ", "CCNSTW", "CEIILT", "CEIMPT", "CEIPST", "DDLNOR", "DHHLOR", "DHHNOT", "DHLNOR",
    "EIIITT", "EMOTTT", "ENSSSU", "FIPRSY", "GORRVW", "HIPRRY", "NOOTUW", "OOOTTU" };
 
+ // initialize the arraylists that hold the guesses
  private static ArrayList<String> wordArrayList1 = new ArrayList<String>();
  private static ArrayList<String> wordArrayList2 = new ArrayList<String>();
 
+ // initialize the integer that stores what turn the player is on
  private int playerTurn = 0;
 
+ // main method
  public static void main(String[] args) throws IOException, InterruptedException {
 
+  // initialize the dice objects
   for (int i = 0; i < 25; i++) {
    diceArray[i] = new BoggleDice(diceLetters[i], 0);
   }
@@ -694,15 +709,16 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
    * 
    */
 
+  // initialize the file and the scanner for the file
   File List = new File("wordlist.txt");
   Scanner fileScanner = new Scanner(List);
   int c = 0;
   int letterCounter = 0;
   String startLetter = "B";
+  // convert the text file into the dictionary array
   while (fileScanner.hasNext()) {
    words[c] = fileScanner.next().toUpperCase();
    if (!startLetter.equals(words[c].substring(0, 1))) {
-    // System.out.println(startLetter + " " + c);
     startLetterIndexes[letterCounter] = c;
     letterCounter++;
    }
@@ -710,11 +726,6 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
    c++;
   }
   fileScanner.close();
-
-  /*
-   * for(int i = 0; i < 26; i++) { System.out.println(startLetterIndexes[i]); }
-   */
-
  }
 
 }
