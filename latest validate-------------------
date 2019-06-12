@@ -46,6 +46,8 @@ public class validateWord {
 	}
 
 	// recursive program that returns if the word is found in the dictionary or not
+	// uses a recursive binary search to find the word
+	
 	public boolean recursivelyValidateWord(String[] dictionary, String target, int Min, int Max) {
 		int middle = (Min + Max) / 2;
 		if (Max < Min)
