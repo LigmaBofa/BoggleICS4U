@@ -36,3 +36,10 @@ In-Game Features:
 - text field on the left has the words correctly entered by the player in singleplayer mode
 - points text fields indicate players' points
 - text field for entering words found by users
+
+
+Thanks for playing Boggle!!!!!!!!
+Hope you enjoyed the game!!!!
+:)
+
+
