@@ -11,6 +11,20 @@
 General:
 GUI very user friendly, bright colours, quick and simple movement between frames.
 All buttons operate as labelled and act quickly and efficiently.
+Descriptions/short comments pop up after choosing a mode to play in for user friendliness.
 
+
+Dice Class - Randomizes the board and its die.
+Validation of words:
+- binary search recursively to find word in dictionary
+- recursively checks the board to find if it exists
+
+Timers:
+- 3 minute timer for single player
+- 15 seconds per turn for multiplayer
+
+Settings Menu:
+- option to change minimum word length
+- something else
 
 
