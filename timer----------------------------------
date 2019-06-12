@@ -32,7 +32,7 @@ public class Timer15 extends JPanel implements Runnable { // extending JPanel to
 		if (gameMode) {
 			originalSeconds = 180;
 		} else {
-			originalSeconds = 3;
+			originalSeconds = 15;
 		}
 		second = originalSeconds;
 	}
