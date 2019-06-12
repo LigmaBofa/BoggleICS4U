@@ -659,6 +659,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
 			textArea1.setText("");
 			textArea2.setText("");
 			playerTurnLabel.setText(p1Name + "'s Turn");
+			start.setEnabled(true);
 			panMPause.setVisible(false);
 			
 		} else if (command.equals("Settings")) {
@@ -694,6 +695,7 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
 				String temp = String.valueOf(diceArray[i].getOrientation());
 				dice[i].setText(temp);
 			}
+			start.setEnabled(false);
 			TimerZero = false;
 			tt.start(soloGame);
 
