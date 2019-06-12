@@ -70,186 +70,171 @@ public class validateWord {
 		index = 1;
 		for (int i = 0; i < word.length(); i++) {
 			posLetters[i] = -1;
-		}
+		} //set all stored indices to -1 (empty)
 		
 		for (int i = 0; i < 25; i++) {
 			if (board[i].equals(word.substring(0, 1))) {
 				for(int j = 0; j < word.length(); j++) {
 					posLetters[j] = -1;
-				}
-				posLetters[0] = i;
-				prevPositionsAL.clear();
-				prevPositionsAL.add(posLetters[0]);
-				System.out.println("board index: " + i);
-				stack.clear();
-				stack.push(i);
-				if (recursiveBoard(i, i)) {
-					posLetters[0] = i;
-					prevPositionsAL.add(0, posLetters[0]);
+				}                        // check to make sure there aren't any positions set
+				posLetters[0] = i;       // set the first stored index to the starting letter (this array used for displaying colours on the board)
+				prevPositionsAL.clear(); // clear the arraylist that stores the positions of the letters on the board
+				prevPositionsAL.add(posLetters[0]); // store index in arraylist (this arraylist used for validation)
+				System.out.println("board index: " + i); //delet this
+				stack.clear(); // reset state of stack
+				stack.push(i); // add one to stack
+				if (recursiveBoard(i, i)) { // call the method that validates the positions of the letters on the board
+					posLetters[0] = i;  // store the index in the array
+					prevPositionsAL.add(0, posLetters[0]); // store the index in the array
 					System.out.println(i);
 					return posLetters;
 				}
 				index = 1;
 			}
 		}
-		return posLetters;
+		return posLetters; // return the positions of the letters on the board to be coloured
 	}
 
-	public boolean recursiveBoard(int i, int startI) {
+	public boolean recursiveBoard(int i, int startI) { // method to determine positions of the letters on the board
 		
-		if(index >= word.length()) {
-			System.out.println("test valid");
-			return true;
+		if(index >= word.length()) { // if the last index of the array is filled that means that the word must be valid and on the board, so it returns true
+			System.out.println("test valid"); // delet this
+			return true; 
 		}
 		
-		System.out.println(word.charAt(index) + " index: " + index);
-		for(int k : posLetters) {
-			System.out.println("posLetters: " + k);
+		System.out.println(word.charAt(index) + " index: " + index);  //delet this
+		for(int k : posLetters) {                                     //delet this
+			System.out.println("posLetters: " + k);               //delet this
 		}
 		
 		// up + left
 		if (i - 6 >= 0 && i % 5 != 0 && board[i-6].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i-6)) { // checks if the up & left direction is valid, and then checks if the letter in that spot is equal to the current index of the word
-			System.out.println("up left from " + i + " to " + board[i-6]);
+			System.out.println("up left from " + i + " to " + board[i-6]); //delet this
 			posLetters[index] = i-6; // adds the new valid index to posLetters
-			prevPositionsAL.add(posLetters[index]);
+			prevPositionsAL.add(posLetters[index]); // adds the new valid index to prevPositionsAL
 			if(index >= word.length()-1) { // checks if we are checking the last index of the original word, then the word is found
 				return true;
 			} else {
 				index++; // continue to next letter
-				directions = true;
-				stack.push(i);
-				return recursiveBoard(i - 6, startI);
+				directions = true; // directions is true when there is a possible path to the next letter
+				stack.push(i); // add one to the stack
+				return recursiveBoard(i - 6, startI); // recursive call
 			}
 		}
-		System.out.println("move on 1");
+		System.out.println("move on 1"); //delet this
 		// up
-		if (i - 5 >= 0 && board[i-5].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i-5)) {
-			System.out.println("up from " + i + " to " + board[i-5]);
-			posLetters[index] = i-5;
-			prevPositionsAL.add(posLetters[index]);
+		if (i - 5 >= 0 && board[i-5].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i-5)) { // checks the position directly up, sees if it is a valid direction, and then checks if the letter in that spot is equal to the current index of the word
+			System.out.println("up from " + i + " to " + board[i-5]); //delet this
+			posLetters[index] = i-5; // add index to posLetters array
+			prevPositionsAL.add(posLetters[index]); // add index to prevPositionsAL 
 			
-			/*if(index >= word.length()-1 && posLetters[word.length()-1] != -1) {
+			/*if(index >= word.length()-1 && posLetters[word.length()-1] != -1) { // checks if the word has been completed, then returns if true
 				return true;
-			} else if (posLetters[prevPositionsAL.size()-1] == -1){
+			} else if (posLetters[prevPositionsAL.size()-1] == -1){ // if the word is not completed, recursive call
 				index++; directions = true; stack.push(i);
 				return recursiveBoard(i - 5, startI);
-			} else {
+			} else {  // if the word cannot be completed, return false
 				return false;
 			}*/
-			if(index >= word.length()-1) {
+			if(index >= word.length()-1) { // checks if word is completed, the returns true 
 				return true;
 			} else {
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i - 5, startI);
+				index++; directions = true; stack.push(i); // continue to next letter, set directions to true, add one to the stack
+				return recursiveBoard(i - 5, startI); // recursive call
 			}
 		}
-		System.out.println("move on 2");
+		System.out.println("move on 2"); //delet this
 		
 		
 		// up + right
-		if (i - 4 >= 0 && (i+1) % 5 != 0 && board[i-4].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i-4)) {
-			System.out.println("up right from " + i + " to " + board[i-4]);
-			posLetters[index] = i-4;
-			prevPositionsAL.add(posLetters[index]);
-			if(index >= word.length()-1) {
+		if (i - 4 >= 0 && (i+1) % 5 != 0 && board[i-4].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i-4)) { //checks if the position up and to the right is valid, then checks if the required letter is in that space
+			System.out.println("up right from " + i + " to " + board[i-4]); //delet this
+			posLetters[index] = i-4; // add index to posLetters
+			prevPositionsAL.add(posLetters[index]); // add index to prevPositionsAL
+			if(index >= word.length()-1) { // checks if word is completed, then returns true if completed
 				return true;
 			} else {
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i - 4, startI);
+				index++; directions = true; stack.push(i); // move on to next direction, set directions to true, add one to the stack
+				return recursiveBoard(i - 4, startI); // recursive call
 			}
 		}
-		System.out.println("move on 3");
+		System.out.println("move on 3"); //delet this
 		// left
-		if (i - 1 >= 0 && i % 5 != 0 && board[i-1].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i-1)) {
-			System.out.println("left from " + i + " to " + board[i-1]);
-			posLetters[index] = i-1;
-			prevPositionsAL.add(posLetters[index]);
-			if(index >= word.length()-1) {
+		if (i - 1 >= 0 && i % 5 != 0 && board[i-1].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i-1)) { // checks if the position to the left is a valid position, then checks if the required letter is in that space
+			System.out.println("left from " + i + " to " + board[i-1]); //delet this
+			posLetters[index] = i-1; // add index to posLetters
+			prevPositionsAL.add(posLetters[index]); // add index to prevPositionsAL
+			if(index >= word.length()-1) { // checks if word is completed, then returns true if completed
 				return true;
 			} else {
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i - 1, startI);
+				index++; directions = true; stack.push(i); //move on to next direction, set directions to true, add one to the stack
+				return recursiveBoard(i - 1, startI); // recursive call
 			}
 		}
-		System.out.println("move on 4");
+		System.out.println("move on 4"); //delet this
 		// right
-		if (i + 1 <= 24 && (i + 1) % 5 != 0 && board[i+1].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+1)) {
-			System.out.println("right from " + i + " to " + board[i+1]);
-			posLetters[index] = i+1;
-			prevPositionsAL.add(posLetters[index]);
-			if(index >= word.length()-1) {
+		if (i + 1 <= 24 && (i + 1) % 5 != 0 && board[i+1].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+1)) { // checks if the position to the left is a valid position, then checks if the required letter is in that space
+			System.out.println("right from " + i + " to " + board[i+1]); //delet this
+			posLetters[index] = i+1; //add index to posLetters
+			prevPositionsAL.add(posLetters[index]); // add index to prevPositionsAL
+			if(index >= word.length()-1) { // checks if word is completed, then returns true if completed
 				return true;
 			} else {
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i + 1, startI);
+				index++; directions = true; stack.push(i); // move on to next direction, set directions to true, add one to the stack
+				return recursiveBoard(i + 1, startI); // recursive call
 			}
 		}
-		System.out.println("move on 5");
+		System.out.println("move on 5"); //delet this
 		// down + left
-		if (i + 4 <= 24 && i % 5 != 0 && board[i+4].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+4)) {
-			System.out.println("down left from " + i + " to " + board[i+4]);
-			posLetters[index] = i+4;
-			prevPositionsAL.add(posLetters[index]);
-			if(index >= word.length()-1) {
+		if (i + 4 <= 24 && i % 5 != 0 && board[i+4].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+4)) { // checks if the position down and to the left is a valid position, then checks if the required letter is in that space
+			System.out.println("down left from " + i + " to " + board[i+4]); //delet this
+			posLetters[index] = i+4; //add index to posLetters
+			prevPositionsAL.add(posLetters[index]); // add index to prevPositionsAL
+			if(index >= word.length()-1) { // checks if word is completed, then returns true if completed
 				return true;
 			} else {
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i + 4, startI);
+				index++; directions = true; stack.push(i); // move on to the next direction, set directions to true, add one to the stack 
+				return recursiveBoard(i + 4, startI); // recursive call
 			}
-			/*if(index >= word.length()-1 && posLetters[word.length()-1] != -1) {
-				return true;
-			} else if (posLetters[prevPositionsAL.size()-1] == -1){
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i + 4, startI);
-			} else {
-				return false;
-			}*/
 		}
-		System.out.println("move on 6");
+		System.out.println("move on 6"); //delet this
 		// down
-		if (i + 5 <= 24 && board[i+5].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+5)) {
-			System.out.println("up right from " + i + " to " + board[i+5]);
-			posLetters[index] = i+5;
-			prevPositionsAL.add(posLetters[index]);
-			if(index >= word.length()-1) {
+		if (i + 5 <= 24 && board[i+5].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+5)) { // checks if the position down is a valid position, then checks if the required letter is in that space
+			System.out.println("up right from " + i + " to " + board[i+5]); //delet this
+			posLetters[index] = i+5; // add index to posLetters
+			prevPositionsAL.add(posLetters[index]); // add index to prevPositionsAL
+			if(index >= word.length()-1) { // checks if word is completed, then returns true if completed
 				return true;
 			} else {
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i + 5, startI);
+				index++; directions = true; stack.push(i); // move on to the next direction, set directions to true, add one to stack
+				return recursiveBoard(i + 5, startI); // recursive call
 			}
-			/*if(index >= word.length()-1 && posLetters[word.length()-1] != -1) {
-				return true;
-			} else if (posLetters[prevPositionsAL.size()-1] == -1){
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i + 5, startI);
-			} else {
-				return false;
-			}*/
+
 		}
-		System.out.println("move on 7");
+		System.out.println("move on 7"); //delet this
 		// down + right
-		if (i + 6 <= 24 && (i+1) % 5 != 0 && board[i+6].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+6)) {
-			System.out.println("up right from " + i + " to " + board[i+6]);
-			posLetters[index] = i+6;
-			prevPositionsAL.add(posLetters[index]);
-			if(index >= word.length()-1) {
+		if (i + 6 <= 24 && (i+1) % 5 != 0 && board[i+6].charAt(0) == word.charAt(index) && !prevPositionsAL.contains(i+6)) { //checks if the position down and to the right is a valid position, then checks if the required letter is in that space
+			System.out.println("up right from " + i + " to " + board[i+6]); //delet this
+			posLetters[index] = i+6; // add index to posLetters
+			prevPositionsAL.add(posLetters[index]); // add index to prevPositionsAL
+			if(index >= word.length()-1) { // checks if word is completed, then returns true if completed
 				return true;
 			} else {
-				index++; directions = true; stack.push(i);
-				return recursiveBoard(i + 6, startI);
+				index++; directions = true; stack.push(i); // move on to next direction, set directions to true, add one to the stack
+				return recursiveBoard(i + 6, startI); // recursive call
 			}
 		}
-		if (!directions) {
-			if (i == startI) {
-				System.out.println("adsfasdfasd");
+		if (!directions) { // checks to see if any valid directions exist
+			if (i == startI) { // checks to see if the program has moved at all from the original letter position
+				System.out.println("adsfasdfasd"); //delet this
 				return false;
 			} else {
-				System.out.println("pop " + stack.peek());
+				System.out.println("pop " + stack.peek()); //delet this
 				for(int k : stack) {
 					System.out.println("stack: " + k);
-				}
-				stack.pop();
-				return recursiveBoard(stack.peek(), startI);
+				} //delet this
+				stack.pop(); // goes back one step
+				return recursiveBoard(stack.peek(), startI); // recursive call
 			}
 		}
 		return false;
