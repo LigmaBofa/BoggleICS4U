@@ -1,0 +1,984 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import javax.swing.WindowConstants;
+import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
+
+public class MyBoggle2nd extends JFrame implements ActionListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	static String p1Name = "Player One";
+	static String p2Name = "Player Two";
+	public static boolean soloGame = false;
+	static ArrayList<String> pWords = new ArrayList<String>();
+	static int minWordLength = 3;
+
+	JFrame frame = new JFrame(); // window
+	JLabel pane;				// main menu panel
+
+	JLabel title;
+
+	JTextField soloName;		// names of the solo player
+	JTextField multiName1;      // names of the multiple players
+	JTextField multiName2;
+
+	ImageIcon imageIcon;
+	JLabel label;
+	JLabel test;
+	JButton solo;				// button to start solo game
+	JButton multiplayer;       // button to start mulitplayer game
+	JButton instructions;		// button to display instructions
+	JButton btn1;
+	JButton btn2;
+
+	JLabel logo; 				// label to display boggle logo
+
+	JPanel temp;				// panels for main menu (formatting)
+	JPanel temp2;
+
+	BufferedImage myPicture;
+	JLabel picLabel;
+
+	// Multi-player screen
+	JPanel pauseScreen;			// panel to display the paused screen
+	JLabel panMPause;			// label on the paused screen
+	JButton continueButton;
+	JButton restartB;
+	JButton settingsB;
+	JPanel topSpacerPM;
+	
+	// settings panel
+	JLabel setP; // backtground jlabel of settings window
+	
+	JPanel setWindow; // back settings window
+	
+	JLabel settingsLabel;
+	JPanel minLengthsPanel;
+	JLabel minLengthsLabel;
+	JButton minWordLengthB1; // 2
+	JButton minWordLengthB2; // 3
+	JButton minWordLengthB3; // 4
+	
+	JPanel themesPanel;
+	JLabel themesLabel;
+	JButton classicTheme;
+	JButton modernTheme;
+	
+	JButton settingsBack;
+
+	JLabel panM; // main screen panel for multiplayer
+	JPanel top; // holds main menu and pause buttons
+	JPanel left; // store information for p1
+	JPanel Midmid; // holds boggle grid
+	JPanel topMid; // holds timer and start button
+	JPanel mid; // panel on the back layer
+	JPanel botMid; // holds textfield and enter button
+	JPanel right; // store information for p2
+
+	// top panel
+	JButton pause;
+	JButton mainMenu;
+	JLabel mode;
+	JButton Scramble;
+
+	// left panel
+	JLabel name;			// displays name of first player
+	JLabel wordlistTitle; // has the title of the area that stores the guessed words
+	JScrollPane wordlist; // change to scrollPane later
+	JLabel score;
+	JTextArea textArea1;
+
+	// mid panel (probably box layout and grid layout
+	JLabel timer;	// displays the timer
+	private static Timer15 tt; // initializes the timer object
+	JButton start; // start button
+	JButton Enter; // enter button
+
+	// grid of JLabels for the boggle grid of letter
+	JLabel[] dice = new JLabel[25];
+
+	// bunch of JLabels
+	JLabel playerTurnLabel;
+
+	// bottom mid panel
+	JTextField enterWord;
+
+	// rightpanel
+	JLabel name2; // name for the second player
+	JLabel wordlistTitle2; // title of the wordlist for the second player
+	JScrollPane wordlist2; // scroll pane to allow scrolling of the text area
+	JLabel score2; // displays score of the second player
+	JTextArea textArea2; // displays guessed words of the second player
+
+	private int minLengthOption = 3;
+	private int themeOption = 1; // 1 is classic theme, 2 is modern theme
+	private int winCondition = 10;
+
+	private static validateWord Derrick; // declare object that contains the methods to validate the words
+	private static int[] redValues = new int[25]; // these three arrays store the rgb value of the gradient tiles on the
+													// board
+	private static int[] greenValues = new int[25];
+	private static int[] blueValues = new int[25];
+
+	GridBagConstraints c = new GridBagConstraints();
+
+	
+	public MyBoggle2nd() throws IOException, InterruptedException {
+		setTitle("MyBoggle!");
+		setLocation(100, 100);
+		setSize(1355, 810);
+	//	setResizable(false);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		instance = this;
+		
+		setLayout(new FlowLayout());
+
+		// fonts
+		Font helvetica = new Font("Helvetica", Font.BOLD, 20);
+		Font verdana = new Font("Helvetica", Font.PLAIN, 20);
+		
+
+		// Settings screen
+		setP = new JLabel(new ImageIcon("yellowBg.jpg"));
+		setP.setLayout(new FlowLayout(FlowLayout.CENTER));
+		setP.setVisible(false);
+		add(setP);
+		
+		settingsLabel = new JLabel("Settings");
+		settingsLabel.setFont(new Font("Helvetica", Font.BOLD, 18));
+		settingsLabel.setPreferredSize(new Dimension(800, 30));
+		setP.add(settingsLabel);
+		
+		setWindow = new JPanel();
+		setWindow.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		setWindow.setPreferredSize(new Dimension(800, 670));
+		setWindow.setBackground(new Color(99, 173, 242));
+		setWindow.setBorder(new MatteBorder(4, 4, 4, 4, new Color(69,69,69)));
+		setP.add(setWindow);
+		
+		minLengthsPanel = new JPanel();
+		minLengthsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 30));
+		minLengthsPanel.setPreferredSize(new Dimension(700, 250));
+		minLengthsPanel.setBackground(new Color(84, 94, 117));
+		setWindow.add(minLengthsPanel);
+		
+		minLengthsLabel = new JLabel("Choose the minimum word length:");
+		minLengthsLabel.setFont(new Font("Verdana", Font.PLAIN, 32));
+		minLengthsLabel.setForeground(Color.white);
+		minLengthsPanel.add(minLengthsLabel);
+		
+		minWordLengthB1 = new JButton("2");
+		minWordLengthB1.addActionListener(this);
+		minWordLengthB1.setPreferredSize(new Dimension(150, 100));
+		minWordLengthB1.setBackground(new Color(167, 204, 237));
+		minWordLengthB1.setFont(new Font("Verdana", Font.PLAIN, 40));
+		minLengthsPanel.add(minWordLengthB1);
+		
+		minWordLengthB2 = new JButton("3");
+		minWordLengthB2.addActionListener(this);
+		minWordLengthB2.setPreferredSize(new Dimension(150, 100));
+		minWordLengthB2.setBackground(new Color(167, 204, 237));
+		minWordLengthB2.setFont(new Font("Verdana", Font.PLAIN, 40));
+		minLengthsPanel.add(minWordLengthB2);
+		
+		minWordLengthB3 = new JButton("4");
+		minWordLengthB3.addActionListener(this);
+		minWordLengthB3.setPreferredSize(new Dimension(150, 100));
+		minWordLengthB3.setBackground(new Color(167, 204, 237));
+		minWordLengthB3.setFont(new Font("Verdana", Font.PLAIN, 40));
+		minLengthsPanel.add(minWordLengthB3);
+		
+		if(minLengthOption == 2) {
+			minWordLengthB1.setBackground(new Color(69,69,69));
+			minWordLengthB2.setForeground(Color.WHITE);
+		} else if (minLengthOption == 3) {
+			minWordLengthB2.setBackground(new Color(69,69,69));
+			minWordLengthB2.setForeground(Color.WHITE);
+		} else {
+			minWordLengthB3.setBackground(new Color(69,69,69));
+			minWordLengthB3.setForeground(Color.WHITE);
+		}
+		
+		
+		// theme panel
+		themesPanel = new JPanel();
+		themesPanel.setPreferredSize(new Dimension(700, 250));
+		themesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 30));
+		themesPanel.setBackground(new Color(84, 94, 117));
+		setWindow.add(themesPanel);
+		
+		themesLabel = new JLabel("            Choose a theme:            ");
+		themesLabel.setFont(new Font("Verdana", Font.PLAIN, 32));
+		themesLabel.setForeground(Color.white);
+		themesPanel.add(themesLabel);
+		
+		classicTheme = new JButton("Classic Theme");
+		classicTheme.addActionListener(this);
+		classicTheme.setPreferredSize(new Dimension(300, 100));
+		classicTheme.setBackground(new Color(167, 204, 237));
+		classicTheme.setForeground(new Color(69,69,69));
+		classicTheme.setFont(new Font("Verdana", Font.PLAIN, 30));
+		themesPanel.add(classicTheme);
+		
+		modernTheme = new JButton("Modern Theme");
+		modernTheme.addActionListener(this);
+		modernTheme.setPreferredSize(new Dimension(300, 100));
+		modernTheme.setBackground(new Color(167, 204, 237));
+		modernTheme.setForeground(new Color(69,69,69));
+		modernTheme.setFont(new Font("Verdana", Font.PLAIN, 30));
+		themesPanel.add(modernTheme);
+		
+		if(themeOption == 2) {
+			classicTheme.setBackground(new Color(69,69,69));
+			classicTheme.setForeground(Color.WHITE);
+		} else if (themeOption == 1) {
+			modernTheme.setBackground(new Color(69,69,69));
+			modernTheme.setForeground(Color.WHITE);
+		}
+		
+		settingsBack = new JButton("Done");
+		settingsBack.addActionListener(this);
+		settingsBack.setPreferredSize(new Dimension(200, 70));
+		settingsBack.setBackground(new Color(167, 204, 237));
+		settingsBack.setFont(new Font("Verdana", Font.PLAIN, 16));
+		setWindow.add(settingsBack);
+		
+		
+		// pause menu screen
+		panMPause = new JLabel(new ImageIcon("yellowBg.jpg"));
+		panMPause.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 100));
+		panMPause.setVisible(false);
+		add(panMPause);
+
+		pauseScreen = new JPanel();
+		pauseScreen.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+		pauseScreen.setPreferredSize(new Dimension(400, 600));
+		pauseScreen.setBackground(new Color(0, 0, 0, 100));
+		panMPause.add(pauseScreen);
+
+		topSpacerPM = new JPanel();
+		topSpacerPM.setOpaque(false);
+		topSpacerPM.setPreferredSize(new Dimension(250, 150));
+		pauseScreen.add(topSpacerPM);
+		
+		continueButton = new JButton("Continue");
+		continueButton.addActionListener(this);
+		continueButton.setFont(helvetica);
+		continueButton.setPreferredSize(new Dimension(250, 60));
+		pauseScreen.add(continueButton);
+
+		restartB = new JButton("Restart");
+		restartB.addActionListener(this);
+		restartB.setFont(helvetica);
+		restartB.setPreferredSize(new Dimension(250, 60));
+		pauseScreen.add(restartB);
+
+		settingsB = new JButton("Settings");
+		settingsB.addActionListener(this);
+		settingsB.setFont(helvetica);
+		settingsB.setPreferredSize(new Dimension(250, 60));
+		pauseScreen.add(settingsB);
+		
+		
+		// multiplayer screen
+		panM = new JLabel(new ImageIcon("yellowBg.jpg"));
+		panM.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		add(panM);
+		
+		top = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		top.setPreferredSize(new Dimension(1360, 70));
+		top.setBackground(new Color(224, 74, 27, 255));
+		panM.add(top);
+
+		mainMenu = new JButton("Main Menu");
+		mainMenu.addActionListener(this);
+		mainMenu.setFont(helvetica);
+		mainMenu.setPreferredSize(new Dimension(150, 50));
+		top.add(mainMenu);
+		
+		pause = new JButton("Pause");
+		pause.addActionListener(this);
+		pause.setFont(helvetica);
+		pause.setPreferredSize(new Dimension(150, 50));
+		top.add(pause);
+
+		// left panel
+
+		left = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 10));
+		left.setPreferredSize(new Dimension(260, 700));
+		left.setBackground(new Color(0, 0, 0, 50));
+		panM.add(left);
+
+		name = new JLabel(p1Name);
+		name.setPreferredSize(new Dimension(200, 30));
+		name.setForeground(Color.WHITE);
+		name.setFont(helvetica);
+		left.add(name);
+
+		wordlistTitle = new JLabel("Word list:");
+		wordlistTitle.setPreferredSize(new Dimension(200, 20));
+		wordlistTitle.setForeground(Color.WHITE);
+		wordlistTitle.setFont(new Font("Helvetica", Font.ITALIC, 20));
+		left.add(wordlistTitle);
+
+		textArea1 = new JTextArea("");
+		textArea1.setEditable(false);
+
+		wordlist = new JScrollPane(textArea1);
+		wordlist.setPreferredSize(new Dimension(240, 400));
+		left.add(wordlist);
+
+		score = new JLabel("Score");
+		score.setPreferredSize(new Dimension(200, 60));
+		score.setForeground(Color.WHITE);
+		score.setFont(helvetica);
+		left.add(score);
+
+		// whole mid panel
+
+		Midmid = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		Midmid.setPreferredSize(new Dimension(600, 700));
+		Midmid.setBackground(new Color(0, 0, 0, 50));
+		panM.add(Midmid);
+
+		// topMid panel
+
+		topMid = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		topMid.setOpaque(false);
+		Midmid.add(topMid);
+
+		playerTurnLabel = new JLabel(p1Name + "'s Turn");
+		playerTurnLabel.setForeground(Color.WHITE);
+		playerTurnLabel.setFont(helvetica);
+		topMid.add(playerTurnLabel);
+
+		start = new JButton("START");
+		start.addActionListener(this);
+		start.setPreferredSize(new Dimension(130, 50));
+		start.setFont(helvetica);
+		topMid.add(start);
+
+		Scramble = new JButton("Scramble");
+		Scramble.addActionListener(this);
+		Scramble.setPreferredSize(new Dimension(130, 50));
+		Scramble.setFont(helvetica);
+		topMid.add(Scramble);
+		
+		tt = new Timer15();
+		tt.setPreferredSize(new Dimension(180, 50));
+		topMid.add(tt);
+		
+
+		// mid panel with the grid of dice
+		mid = new JPanel(new GridLayout(5, 5));
+		mid.setPreferredSize(new Dimension(400, 400));
+		mid.setBackground(Color.WHITE);
+		Midmid.add(mid);
+
+		int r = 230; // --> 96
+		int g = 106; // --> 38
+		int b = 92; // --> 232
+
+		// initialize the tiles on the board, colors and labels
+		for (int i = 0; i < 25; i++) {
+			dice[i] = new JLabel("");
+			dice[i].setHorizontalAlignment(SwingConstants.CENTER);
+			Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+			dice[i].setBorder(raisedbevel);
+			dice[i].setForeground(Color.WHITE);
+			dice[i].setBackground(new Color(r, g, b, 255));
+			dice[i].setFont(new Font("Verdana", Font.PLAIN, 40));
+			dice[i].setOpaque(true);
+			mid.add(dice[i]);
+			redValues[i] = r;
+			greenValues[i] = g;
+			blueValues[i] = b;
+			r -= 5;
+			g -= 3;
+			b += 5;
+		}
+
+		// bottom mid panel
+		botMid = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		botMid.setOpaque(false);
+
+		enterWord = new JTextField();
+		enterWord.addActionListener(this);
+		enterWord.setFont(helvetica);
+		enterWord.setPreferredSize(new Dimension(400, 50));
+		botMid.add(enterWord);
+
+		Enter = new JButton("Enter");
+		Enter.setPreferredSize(new Dimension(100, 50));
+		Enter.addActionListener(this);
+		Enter.setFont(helvetica);
+		botMid.add(Enter);
+
+		Midmid.add(botMid);
+
+		right = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 10));
+		right.setPreferredSize(new Dimension(260, 700));
+		right.setBackground(new Color(0, 0, 0, 50));
+		panM.add(right);
+
+		name2 = new JLabel(p2Name);
+		name2.setPreferredSize(new Dimension(200, 30));
+		name2.setForeground(Color.WHITE);
+		name2.setFont(helvetica);
+		right.add(name2);
+
+		wordlistTitle2 = new JLabel("Word list:");
+		wordlistTitle2.setPreferredSize(new Dimension(200, 20));
+		wordlistTitle2.setForeground(Color.WHITE);
+		wordlistTitle2.setFont(new Font("Helvetica", Font.ITALIC, 20));
+		right.add(wordlistTitle2);
+
+		textArea2 = new JTextArea("");
+		textArea2.setEditable(false);
+
+		wordlist2 = new JScrollPane(textArea2);
+		wordlist2.setPreferredSize(new Dimension(240, 400));
+		right.add(wordlist2);
+
+		score2 = new JLabel(" Score");
+		score2.setPreferredSize(new Dimension(240, 60));
+		score2.setForeground(Color.WHITE);
+	//	score2.setOpaque(isOpaque);
+	//	score2.setBackground(new Color(240, 100, 40, 255));
+		score2.setOpaque(false);
+		score2.setFont(helvetica);
+		right.add(score2);
+
+		panM.setVisible(false);
+
+		
+		
+		
+		/*
+		 * 
+		 * INTRO SCREEN
+		 * 
+		 * 
+		 */
+		
+		pane = new JLabel(new ImageIcon("bg2.jpg"));
+
+		pane.setLayout(new GridBagLayout());
+
+		temp2 = new JPanel(); // top panel behind boggle logo
+		temp2.setBackground(new Color(80, 0, 50, 50));
+		temp2.setPreferredSize(new Dimension(650, 142));
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridheight = 1;
+		c.gridwidth = 8;
+		c.insets = new Insets(0, 10, 10, 10);
+		pane.add(temp2, c);
+
+		logo = new JLabel(new ImageIcon("boggle_logo.png"));
+		temp2.add(logo);
+
+		instructions = new JButton("Instructions");
+		instructions.addActionListener(this);
+		instructions.setFont(helvetica);
+		// instructions.setPreferredSize(new Dimension(200, 40));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridwidth = 4;
+		c.gridheight = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 20, 120);
+		pane.add(instructions, c);
+
+		temp = new JPanel();
+		temp.setBackground(new Color(100, 50, 0, 0));
+		temp.setPreferredSize(new Dimension(50, 100));
+		c.gridx = 2;
+		c.gridy = 2;
+		c.gridheight = 2;
+		c.gridwidth = 1;
+		c.insets = new Insets(10, 10, 10, 10);
+		pane.add(temp, c);
+
+		solo = new JButton("SOLO");
+		solo.addActionListener(this);
+		solo.setFont(helvetica);
+		solo.setPreferredSize(new Dimension(250, 50));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		c.gridheight = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 10, 20);
+		pane.add(solo, c);
+
+		soloName = new JTextField("Enter your name");
+		soloName.setFont(new Font("Helvetica", Font.BOLD, 15));
+		soloName.setPreferredSize(new Dimension(250, 40));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 120, 10, 20);
+		pane.add(soloName, c);
+
+		multiplayer = new JButton("MULTIPLAYER");
+		multiplayer.addActionListener(this);
+		multiplayer.setFont(helvetica);
+		multiplayer.setPreferredSize(new Dimension(250, 50));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 3;
+		c.gridy = 3;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.gridwidth = 4;
+		c.insets = new Insets(10, 20, 10, 120);
+		pane.add(multiplayer, c);
+
+		multiName1 = new JTextField("Enter your name");
+		multiName1.setFont(new Font("Helvetica", Font.BOLD, 15));
+		multiName1.setPreferredSize(new Dimension(120, 40));
+		c.gridx = 3;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 20, 10, 5);
+		pane.add(multiName1, c);
+
+		multiName2 = new JTextField("Enter your name");
+		multiName2.setFont(new Font("Helvetica", Font.BOLD, 15));
+		multiName2.setPreferredSize(new Dimension(120, 40));
+		c.gridx = 4;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.ipadx = 10;
+		c.ipady = 10;
+		c.insets = new Insets(10, 5, 10, 120);
+		pane.add(multiName2, c);
+
+		// adds pane tot the screen to set up the home screen
+		add(pane);
+		setVisible(true);
+	}
+
+	private int pauseTime;
+	
+	// sets up action listener for this button that brings up instructions
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+
+		// description
+		if (command.equals("Instructions")) {
+			JOptionPane.showMessageDialog(this,
+					"The game of Boggle is a word puzzle game. There is a 5x5 grid of random letters (or dice), \n"
+							+ "and you need to find possible words that can be made from the 25 letters. You can only \n"
+							+ "choose letters that are connected in all 8 directions. Have Fun!",
+					"Instructions", JOptionPane.INFORMATION_MESSAGE);
+
+			// changes frame if multiplayer screen is chosen
+		} else if (command.equals("MULTIPLAYER")) {
+			
+			if(!multiName1.getText().equals("Enter your name")) {
+				p1Name = multiName1.getText();
+				name.setText(p1Name);
+			} else p1Name = "Player One";
+			if (!multiName2.getText().equals("Enter your name")) {
+				p2Name = multiName2.getText();
+				name2.setText(p2Name);
+			} else p2Name = "Player Two";
+			
+			soloGame = false;
+			panM.add(right);
+			pane.setVisible(false);
+			panM.setVisible(true);
+
+			// changes frame if solo screen is chosen
+		} else if (command.equals("SOLO")) {
+			if (!soloName.getText().equals("Enter your name")) {
+				p1Name = soloName.getText();
+				name.setText(p1Name);
+			} else p1Name = "Player One";
+			
+			soloGame = true;
+			pane.setVisible(false);
+			panM.remove(right);
+			panM.setVisible(true);
+
+		} else if (command.equals("Continue")) {
+			TimerZero = false;
+			panMPause.setVisible(false);
+			tt.start(soloGame);
+			tt.setSeconds(pauseTime);
+			panM.setPreferredSize(new Dimension(1355, 811));
+			panM.setPreferredSize(new Dimension(1355, 810));
+			
+		} else if (command.equals("Restart")) {
+			tt.stop();
+			playerTurn = 0;
+			p1Score = 0;
+			p2Score = 0;
+			score.setText("Score: " + p1Score);
+			score2.setText("Score: " + p2Score);
+			textArea1.setText("");
+			textArea2.setText("");
+			playerTurnLabel.setText(p1Name + "'s Turn");
+			panMPause.setVisible(false);
+			
+		} else if (command.equals("Settings")) {
+			setP.setVisible(true);
+			panMPause.setVisible(false);
+		} else if (command.equals("Main Menu")) {
+			TimerZero = false;
+			if (JOptionPane.showConfirmDialog(null, "Are you sure you want to go back to the main menu?", "Confirmation",
+			        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				pane.setVisible(true);
+				panM.setVisible(false);
+				tt.stop();
+				resetBoard();
+			}
+			
+		} else if (command.equals("Scramble")) {
+			generateBoard();
+			for (int i = 0; i < 25; i++) {
+				String temp = String.valueOf(diceArray[i].getOrientation());
+				dice[i].setText(temp);
+			}
+			
+		} else if (command.equals("START")) { // once the start button is called the game begins and the dice method is called
+			generateBoard();
+			// test case
+			/*dice[0].setText("Z"); dice[1].setText("Z"); dice[2].setText("Z"); dice[3].setText("Z"); dice[4].setText("Z");
+			dice[5].setText("Z"); dice[6].setText("E"); dice[7].setText("Z"); dice[8].setText("Z"); dice[9].setText("Z");
+			dice[10].setText("Z"); dice[11].setText("Z"); dice[12].setText("G"); dice[13].setText("Z"); dice[14].setText("Z");
+			dice[15].setText("Z"); dice[16].setText("Z"); dice[17].setText("E"); dice[18].setText("Z"); dice[19].setText("Z");
+			dice[20].setText("Z"); dice[21].setText("Z"); dice[22].setText("Z"); dice[23].setText("T"); dice[24].setText("Z");*/
+			
+			for (int i = 0; i < 25; i++) {
+				String temp = String.valueOf(diceArray[i].getOrientation());
+				dice[i].setText(temp);
+			}
+			TimerZero = false;
+			tt.start(soloGame);
+
+		} else if (command.equals("Enter")) {
+			if(!soloGame) tt.stop();
+			TimerZero = false;
+			
+			System.out.println("time: " + tt.getTime());
+
+			String guessWord = enterWord.getText().toUpperCase();
+			enterWord.setText("");
+
+			if (pWords.contains(guessWord)) {
+				JOptionPane.showMessageDialog(this, "The word is invalid.", "Word", JOptionPane.WARNING_MESSAGE);
+				
+			} else {
+				pWords.add(guessWord);
+				// validate
+				boolean valid = false;
+				String[] board = new String[25];
+				for (int i = 0; i < 25; i++) {
+				//	board[i] = dice[i].getText();
+					board[i] = "" + diceArray[i].getOrientation();
+				}
+
+				Derrick = new validateWord(guessWord, board, startLetterIndexes, words, minWordLength);
+
+				int[] posLetters;
+				if (Derrick.validateDicLen()) {
+					posLetters = Derrick.validateBoard();
+					valid = true;
+					Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+					Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+
+					for (int i = 0; i < guessWord.length(); i++) {
+						for (int j = 0; j < guessWord.length(); j++) {
+							dice[posLetters[i]].setBackground(new Color(42, 15, 76));
+							dice[posLetters[i]].setBorder(loweredbevel);
+						}
+
+					}
+					new Timer(1000, new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							for (int i = 0; i < guessWord.length(); i++) {
+								dice[posLetters[i]].setBackground(new Color(redValues[posLetters[i]],
+										greenValues[posLetters[i]], blueValues[posLetters[i]]));
+								dice[posLetters[i]].setBorder(raisedbevel);
+							}
+						}
+					}).start();
+
+				} else {
+					valid = false;
+					JOptionPane.showMessageDialog(this, "The word is invalid.", "Word", JOptionPane.WARNING_MESSAGE);
+				}
+
+				// check if it already on the list
+				revalidate();
+				if (!soloGame) {
+
+					if (playerTurn == 0) {
+						if (valid) {
+							textArea1.append(guessWord + "\n");
+							playerTurnLabel.setText(p2Name + "'s Turn");
+							p1Score += guessWord.length();
+							score.setText("Score: " + p1Score);
+							playerTurn = 1;
+						}
+					} else {
+						if (valid) {
+							textArea2.append(guessWord + "\n");
+							playerTurnLabel.setText(p1Name + "'s Turn");
+							p2Score += guessWord.length();
+							score2.setText("Score: " + p2Score);
+							playerTurn = 0;
+						}
+					}
+					if (p1Score >= winCondition) {
+						JOptionPane.showMessageDialog(this, p1Name + " WINS!", "WINNER",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else if (p2Score >= winCondition) {
+						JOptionPane.showMessageDialog(this, p2Name + " WINS!", "WINNER",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				} else {
+					if (valid)
+						textArea1.append(guessWord + "\n");
+					playerTurnLabel.setText(p2Name + "'s Turn");
+					p1Score += guessWord.length();
+					score.setText("Score: " + p1Score);
+				}
+				setSize(1355, 821);
+				revalidate();
+				
+				if(!soloGame) TimerZero = false; tt.start(soloGame);
+				setSize(1355, 820);
+			}
+		} else if (command.equals("Pause")) {
+			pauseTime = (int) tt.getTime();
+			tt.stop();
+			
+			panMPause.setVisible(true);
+			pauseScreen.setVisible(true);
+			continueButton.setVisible(true);
+			restartB.setVisible(true);
+			settingsB.setVisible(true);
+			
+		} else if (command.equals("Done")) {
+			panMPause.setVisible(true);
+			setP.setVisible(false);
+			panM.setPreferredSize(new Dimension(1355, 811));
+			panM.setPreferredSize(new Dimension(1355, 810));
+		} else if (command.equals("2")) {
+			minWordLength = 2;
+			minWordLengthB1.setForeground(Color.WHITE);
+			minWordLengthB1.setBackground(new Color(69, 69, 69));
+			minWordLengthB2.setForeground(new Color(69, 69, 69));
+			minWordLengthB2.setBackground(new Color(167, 204, 237));
+			minWordLengthB3.setForeground(new Color(69, 69, 69));
+			minWordLengthB3.setBackground(new Color(167, 204, 237));
+		} else if (command.equals("3")) {
+			minWordLength = 3;
+			minWordLengthB2.setForeground(Color.WHITE);
+			minWordLengthB2.setBackground(new Color(69, 69, 69));
+			minWordLengthB1.setForeground(new Color(69, 69, 69));
+			minWordLengthB1.setBackground(new Color(167, 204, 237));
+			minWordLengthB3.setForeground(new Color(69, 69, 69));
+			minWordLengthB3.setBackground(new Color(167, 204, 237));
+		} else if (command.equals("4")) {
+			minWordLength = 4;
+			minWordLengthB3.setForeground(Color.WHITE);
+			minWordLengthB3.setBackground(new Color(69, 69, 69));
+			minWordLengthB2.setForeground(new Color(69, 69, 69));
+			minWordLengthB2.setBackground(new Color(167, 204, 237));
+			minWordLengthB1.setForeground(new Color(69, 69, 69));
+			minWordLengthB1.setBackground(new Color(167, 204, 237));
+		} else if (command.equals("Classic Theme")) {
+			panM.setIcon(new ImageIcon("Wood.jpg"));
+			classicTheme.setForeground(Color.WHITE);
+			classicTheme.setBackground(new Color(69, 69, 69));
+			modernTheme.setForeground(new Color(69, 69, 69));
+			modernTheme.setBackground(new Color(167, 204, 237));
+		//	panM.setLayout(new FlowLayout);
+		} else if (command.equals("Modern Theme")) {
+			panM.setIcon(new ImageIcon("yellowBg.jpg"));
+			classicTheme.setForeground(new Color(69, 69, 69));
+			classicTheme.setBackground(new Color(167, 204, 237));
+			modernTheme.setForeground(Color.WHITE);
+			modernTheme.setBackground(new Color(69,69,69));
+		}
+	}
+	
+	public void resetBoard() {
+		playerTurn = 0;
+		soloName.setText("");
+		multiName1.setText("");
+		multiName2.setText("");
+		name.setText("Player One");
+		name2.setText("Player Two");
+		p1Score = 0;
+		p2Score = 0;
+		score.setText("Score: " + p1Score);
+		score2.setText("Score: " + p2Score);
+		textArea1.setText("");
+		textArea2.setText("");
+		playerTurnLabel.setText("Player One's Turn");
+	}
+
+	public void generateBoard() {
+		Random rand = new Random();
+
+		BoggleDice[] scrambledDice = new BoggleDice[25];
+		ArrayList<Integer> testArray = new ArrayList<Integer>();
+
+		int test;
+
+		for (int i = 0; i < 25; i++) {
+			test = rand.nextInt(25);
+			if (!testArray.contains(test)) {
+				testArray.add(test);
+				System.out.println(test);
+				scrambledDice[i] = diceArray[test];
+			} else {
+				i--;
+			}
+		}
+		diceArray = scrambledDice;
+
+		for (int i = 0; i < 25; i++) {
+			diceArray[i].rollDie();
+		}
+	}
+
+	private int p1Score = 0;
+	private int p2Score = 0;
+
+	// score and word list
+	public void scoreAndWordlist(String word, int player) {
+		if (player == 1) {
+			p1Score += word.length();
+			wordArrayList1.add(word);
+		} else if (player == 2) {
+			p2Score += word.length();
+			wordArrayList2.add(word);
+		}
+	}
+
+	/**
+	 * Operations done after the game has ended either because reset was clicked or
+	 * the time limit ran out
+	 * 
+	 * @param wordsFound                        --> the words found in the user in
+	 *                                          the text box
+	 * @param wordsComputerFound                --> words found recursively by the
+	 *                                          AI (found in this method)
+	 * @param labelThingBottomCongratulation --> he label at the bottom that
+	 *                                          prints congratulations once the game
+	 *                                          has ended
+	 */
+
+	// used for solo, when the game ends
+	private String wordsFound[] = new String[100];
+	private String wordsComputerFound[] = new String[100];
+	private String labelThingBottomCongratulation = "";
+	private int points;
+
+	public void endGame() {
+		String empty[] = new String[wordsFound.length];
+		wordsFound = empty;
+		wordsComputerFound = empty;
+		labelThingBottomCongratulation = "Thank you for playing Boggle!!!!";
+		if (points > 25)
+			labelThingBottomCongratulation += " You are amazing at Boggle!";
+		else if (points > 10 && points <= 25)
+			labelThingBottomCongratulation += " You are decent at Boggle.";
+		else
+			labelThingBottomCongratulation += " You're pretty bad at this game";
+	}
+
+	public static String[] words = new String[127000];
+	public static int[] startLetterIndexes = new int[26];
+	public static long counter;
+	public static BoggleDice[] diceArray = new BoggleDice[25];
+
+	public static String[] diceLetters = { "AAAGRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM", "AEEGMU", "AEGMNN",
+			"AGIRSY", "BJKQXZ", "CCNSTW", "CEIILT", "CEIMPT", "CEIPST", "DDLNOR", "DHHLOR", "DHHNOT", "DHLNOR",
+			"EIIITT", "EMOTTT", "ENSSSU", "FIPRSY", "GORRVW", "HIPRRY", "NOOTUW", "OOOTTU" };
+
+	private static ArrayList<String> wordArrayList1 = new ArrayList<String>();
+	private static ArrayList<String> wordArrayList2 = new ArrayList<String>();
+
+	public int playerTurn = 0;
+	
+	static MyBoggle2nd instance;
+	boolean TimerZero = false;
+	
+	public static void main(String[] args) throws IOException, InterruptedException {
+
+		for (int i = 0; i < 25; i++) {
+			diceArray[i] = new BoggleDice(diceLetters[i], 0);
+		}
+		MyBoggle2nd frame = new MyBoggle2nd();
+
+		File List = new File("wordlist.txt");
+		Scanner fileScanner = new Scanner(List);
+		int c = 0;
+		int letterCounter = 0;
+		String startLetter = "B";
+		while (fileScanner.hasNext()) {
+			words[c] = fileScanner.next().toUpperCase();
+			if (!startLetter.equals(words[c].substring(0, 1))) {
+				// System.out.println(startLetter + " " + c);
+				startLetterIndexes[letterCounter] = c;
+				letterCounter++;
+			}
+			startLetter = words[c].substring(0, 1);
+			c++;
+		}
+		fileScanner.close();
+		
+	//	if (tt.getTime() == 0) {
+	//		JOptionPane.showMessageDialog(frame, "The time is up!", "WARNING", JOptionPane.WARNING_MESSAGE);
+	//	}
+
+	}
+
+}
