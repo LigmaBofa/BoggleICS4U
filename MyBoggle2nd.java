@@ -181,10 +181,6 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   restart.setPreferredSize(new Dimension(150, 50));
   top.add(restart);
 
-  // spacer1 = new JPanel();
-  // spacer1.setPreferredSize(new Dimension(100, 600));
-  // panM.add(spacer1);
-
   // left panel
   left = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 10));
   left.setPreferredSize(new Dimension(260, 700));
@@ -427,10 +423,10 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   c.insets = new Insets(10, 20, 10, 120);
   pane.add(multiplayer, c);
 
+  //initialize text field asking the user to enter their name on the home screen, singleplayer
   multiName1 = new JTextField("Enter your name");
   multiName1.setFont(new Font("Helvetica", Font.BOLD, 15));
   multiName1.setPreferredSize(new Dimension(120, 40));
-  // c.fill = GridBagConstraints.HORIZONTAL;
   c.gridx = 3;
   c.gridy = 2;
   c.gridwidth = 1;
@@ -439,10 +435,10 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   c.insets = new Insets(10, 20, 10, 5);
   pane.add(multiName1, c);
 
+  //intiialize text field asking the user to enter their name, for multiplayer
   multiName2 = new JTextField("Enter your name");
   multiName2.setFont(new Font("Helvetica", Font.BOLD, 15));
   multiName2.setPreferredSize(new Dimension(120, 40));
-  // c.fill = GridBagConstraints.HORIZONTAL;
   c.gridx = 4;
   c.gridy = 2;
   c.gridwidth = 1;
@@ -451,59 +447,53 @@ public class MyBoggle2nd extends JFrame implements ActionListener {
   c.insets = new Insets(10, 5, 10, 120);
   pane.add(multiName2, c);
 
+  //adds pane to the screen to set up the home screen
   add(pane);
-  // pack();
   setVisible(true);
  }
 
+ //setup for instructions pop-up description
  public void delay() throws InterruptedException {
   Thread.sleep(500);
  }
-
+//sets up action listener for this button that brings up instructions
  public void actionPerformed(ActionEvent e) {
   String command = e.getActionCommand();
-
+//description
   if (command.equals("Instructions")) {
-   // System.out.println("gay");
    JOptionPane.showMessageDialog(this,
      "The game of Boggle is a word puzzle game. There is a 5x5 grid of random letters (or dice), \n"
        + "and you need to find possible words that can be made from the 25 letters. You can only \n"
        + "choose letters that are connected in all 8 directions. Have Fun!",
      "Instructions", JOptionPane.INFORMATION_MESSAGE);
-
+//changes frame if multiplayer is chosen
   } else if (command.equals("MULTIPLAYER")) {
    soloGame = false;
-  // tt.start(soloGame);
-  // tt.setSeconds(15);
    panM.add(right);
    pane.setVisible(false);
    panM.setVisible(true);
-
+//changes frame if multiplayer is chosen
   } else if (command.equals("SOLO")) {
    soloGame = true;
-  // tt.start(soloGame);
-  // tt.setSeconds(180);
    pane.setVisible(false);
    panM.remove(right);
    panM.setVisible(true);
-
+//changes frame if the main menu button is clicked
   } else if (command.equals("Main Menu")) {
    pane.setVisible(true);
    panM.setVisible(false);
    tt.stop();
+   //once the start button is called the game begins and the dice method is called
   } else if (command.equals("START")) {
    generateBoard();
-   // System.out.println(diceArray[5].getOrientation());
    for (int i = 0; i < 25; i++) {
     String temp = String.valueOf(diceArray[i].getOrientation());
     System.out.print(temp + " letter\n");
     dice[i].setText(temp);
    }
-
    tt.start(soloGame);
-
+//
   } else if (command.equals("Enter")) {
-  // revalidate();
    tt.stop();
    System.out.println("time: " + tt.getTime());
 
